@@ -7,6 +7,7 @@ import NewsAdd from '../views/news-manage/NewsAdd'
 import NewsList from '../views/news-manage/NewsList'
 import ProductAdd from '../views/product-manage/ProductAdd'
 import ProductList from '../views/product-manage/ProductList'
+import NotFound from '../views/notfound/NotFound'
 
 const routes = [
     {
@@ -48,6 +49,15 @@ const routes = [
         path: '/product-manage/list',
         name: 'ProductList',
         component: ProductList
+    },
+    {
+        path: '/',
+        redirect: '/index'
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'NotFound',
+        component: NotFound
     }
 ]
 
