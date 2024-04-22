@@ -7,37 +7,34 @@
       :options="options"
     />
     <div class="form">
+      <h3>企业门户网站管理系统</h3>
       <el-form
-        ref="ruleFormRef"
+        ref="loginFormRef"
         style="max-width: 600px"
-        :model="ruleForm"
+        :model="loginForm"
         status-icon
         :rules="rules"
         label-width="auto"
         class="demo-ruleForm"
       >
-        <el-form-item label="Password" prop="pass">
+        <el-form-item label="用户名" prop="username">
           <el-input
-            v-model="ruleForm.pass"
-            type="password"
+            v-model="loginForm.username"
+            type="text"
             autocomplete="off"
           />
         </el-form-item>
-        <el-form-item label="Confirm" prop="checkPass">
+        <el-form-item label="密码" prop="password">
           <el-input
-            v-model="ruleForm.checkPass"
+            v-model="loginForm.password"
             type="password"
             autocomplete="off"
           />
-        </el-form-item>
-        <el-form-item label="Age" prop="age">
-          <el-input v-model.number="ruleForm.age" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm(ruleFormRef)"
-            >Submit</el-button
+          <el-button type="primary" @click="submitForm(loginFormRef)"
+            >登录</el-button
           >
-          <el-button @click="resetForm(ruleFormRef)">Reset</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -47,6 +44,10 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { loadSlim } from "tsparticles-slim"; // if you are going to use `loadSlim`, install the "tsparticles-slim" package too.
+import { useRouter } from 'vue-router';
+import axios from 'axios';
+import { ElMessage } from 'element-plus'
+import { useStore } from 'vuex'
 
 const options = {
   background: {
@@ -131,81 +132,62 @@ const particlesInit = async (engine) => {
   await loadSlim(engine);
 };
 
-const particlesLoaded = async (container) => {
-  console.log("Particles container loaded", container);
-};
+const particlesLoaded = async (container) => {};
 
-const ruleFormRef = ref();
-
-const checkAge = (rule, value, callback) => {
-  if (!value) {
-    return callback(new Error("Please input the age"));
-  }
-  setTimeout(() => {
-    if (!Number.isInteger(value)) {
-      callback(new Error("Please input digits"));
-    } else {
-      if (value < 18) {
-        callback(new Error("Age must be greater than 18"));
-      } else {
-        callback();
-      }
-    }
-  }, 1000);
-};
+const loginFormRef = ref();
+const router = useRouter();
+const store = useStore();
 
 const validatePass = (rule, value, callback) => {
   if (value === "") {
-    callback(new Error("Please input the password"));
+    callback(new Error("请输入用户名"));
   } else {
-    if (ruleForm.checkPass !== "") {
-      if (!ruleFormRef.value) return;
-      ruleFormRef.value.validateField("checkPass", () => null);
-    }
     callback();
   }
 };
 const validatePass2 = (rule, value, callback) => {
   if (value === "") {
-    callback(new Error("Please input the password again"));
-  } else if (value !== ruleForm.pass) {
-    callback(new Error("Two inputs don't match!"));
+    callback(new Error("请输入密码"));
   } else {
     callback();
   }
 };
 
-const ruleForm = reactive({
-  pass: "",
-  checkPass: "",
-  age: "",
+const loginForm = reactive({
+  username: "",
+  password: ""
 });
 
 const rules = reactive({
-  pass: [{ validator: validatePass, trigger: "blur" }],
-  checkPass: [{ validator: validatePass2, trigger: "blur" }],
-  age: [{ validator: checkAge, trigger: "blur" }],
+  username: [{ required: true, validator: validatePass, trigger: "blur" }],
+  password: [{ required: true, validator: validatePass2, trigger: "blur" }]
 });
 
 const submitForm = (formEl) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      console.log("submit!");
+      axios.post('/adminapi/user/login', loginForm).then(res => {
+        if (res.data.ActionType === 'OK') {
+          ElMessage({
+            message: '登录成功！',
+            type: 'success',
+          })
+          store.commit('changeUserInfo', res.data.data)
+          router.push('/')
+        } else {
+          ElMessage.error('用户名和密码不匹配')
+        }
+      })
     } else {
       console.log("error submit!");
       return false;
     }
   });
 };
-
-const resetForm = (formEl) => {
-  if (!formEl) return;
-  formEl.resetFields();
-};
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
 .container {
     display: flex;
     justify-content: center;
@@ -214,15 +196,24 @@ const resetForm = (formEl) => {
     position: fixed;
     top: 50%;
     left: 50%;
-    margin-top: -150px;
-    margin-left: -250px;
+    transform: translate(-50%, -50%);
     width: 500px;
     height: 300px;
+    padding: 20px;
     border-radius: 20px;
-    background: white;
+    background: rgba($color: #000000, $alpha: 0.5);
+    h3 {
+      color: #ffffff;
+      font-size: 30px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
     .el-form {
         height: 100%;
     }
   }
+}
+::v-deep .el-form-item__label {
+  color: #ffffff;
 }
 </style>
