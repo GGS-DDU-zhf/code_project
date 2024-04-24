@@ -1,3 +1,4 @@
+const { put } = require('../../routes/admin/UserRouter')
 const UserService = require('../../services/admin/UserService')
 const JWT = require('../../util/JWT')
 
@@ -63,6 +64,47 @@ const UserController = {
                 gender: Number(gender),
                 avatar
             }
+        })
+    },
+    add: async function (req, res) {
+        const { username, password, introduction, role, gender } = req.body
+        const avatar = `/avataruploads/${req.file.filename}`
+
+        // 调用service模块更新数据
+        await UserService.add({
+            username,
+            password,
+            gender: Number(gender),
+            introduction,
+            role: Number(role),
+            avatar
+        })
+
+        res.send({
+            ActionType: 'OK'
+        })
+    },
+    list: async function (req, res) {
+        const result = await UserService.list(req.params)
+
+        res.send({
+            ActionType: 'OK',
+            data: result
+        })
+    },
+    delete: async function (req, res) {
+        // console.log(req.params.id)
+        await UserService.delete({ _id: req.params.id })
+
+        res.send({
+            ActionType: 'OK'
+        })
+    },
+    put: async function (req, res) {
+        await UserService.put(req.body)
+
+        res.send({
+            ActionType: 'OK'
         })
     }
 }

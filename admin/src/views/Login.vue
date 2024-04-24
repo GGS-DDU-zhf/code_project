@@ -174,6 +174,12 @@ const submitForm = (formEl) => {
             type: 'success',
           })
           store.commit('changeUserInfo', res.data.data)
+          /**
+           * store.commit('isGetterRouter', false) 
+           * 将标记改为路由还未动态设置，防止在admin的权限退出登录并且没有刷新页面的情况下，
+           * 再次登录进入非admin账号，导致非admin账号可以直接通过地址栏访问admin的权限页面
+           * */ 
+          store.commit('changeGetterRouter', false) 
           router.push('/')
         } else {
           ElMessage.error('用户名和密码不匹配')

@@ -21,5 +21,8 @@
 </script>
 
 <style scoped>
-
+.el-main {
+    height: calc(100vh - 60px);
+    overflow: auto;
+}
 </style>

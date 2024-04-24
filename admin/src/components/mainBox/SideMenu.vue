@@ -20,7 +20,7 @@
           <span>个人中心</span>
         </el-menu-item>
 
-        <el-sub-menu index="/user-manage">
+        <el-sub-menu index="/user-manage" v-admin>
           <template #title>
             <el-icon><UserFilled /></el-icon>
             <span>用户管理</span>
@@ -68,8 +68,19 @@ import {
   Pointer
 } from "@element-plus/icons-vue";
 import { useRoute } from 'vue-router'
+import { useStore } from 'vuex'
 
 const router = useRoute()
+const store = useStore()
+
+const vAdmin = {
+  mounted(el) {
+    if (store.state.userInfo.role !== 1) {
+      // 如果不是超级管理员，则删除节点自己，不让用户看到
+      el.parentNode.removeChild(el)
+    }
+  },
+}
 
 const handleOpen = (key, keyPath) => {
   console.log(key, keyPath);
