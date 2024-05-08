@@ -219,7 +219,7 @@ const submitForm = (formEl) => {
     }
   }
 }
-::v-deep .el-form-item__label {
+:v-deep(.el-form-item__label) {
   color: #ffffff;
 }
 </style>

@@ -1,4 +1,3 @@
-const { put } = require('../../routes/admin/UserRouter')
 const UserService = require('../../services/admin/UserService')
 const JWT = require('../../util/JWT')
 

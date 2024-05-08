@@ -135,7 +135,7 @@ const handleEdit = async (data) => {
   const res = await axios.get(`/adminapi/user/list/${data._id}`);
 
 /**
- * 使用reactive初始化的响应式数据，如果想要实现响应式更新，要使用Object.assign
+ * 使用reactive初始化的响应式数据，如果想要实现响应式更新，要使用Object.assign。
  *  直接赋值的话，只是用一个普通数据将响应式对象给覆盖了。
  * 使用ref初始化的响应式数据，如果想要实现响应式更新，要赋值给 ref后的 .value
  * */ 

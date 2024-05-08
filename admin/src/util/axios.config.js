@@ -23,7 +23,6 @@ axios.interceptors.response.use(function (response) {
 
     return response;
   }, function (error) {
-    console.log(error);
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     const { status } = error.response

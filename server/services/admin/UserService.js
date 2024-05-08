@@ -10,7 +10,7 @@ const UserService = {
             { username, introduction, gender, avatar}
         )
     },
-    add: async ({ username, password, gender, role, introduction, avatar}) => {
+    add: async ({ username, password, gender, role, introduction, avatar }) => {
         return UserModal.create({
             username,
             password,

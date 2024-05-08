@@ -33,8 +33,8 @@ const handleChange = (file) => {
 };
 </script>
 
-<style lang="scss" scoped>
-::v-deep .el-upload {
+<style scoped>
+:deep(.el-upload) {
   border: 1px dashed var(--el-border-color);
   border-radius: 6px;
   cursor: pointer;
@@ -43,11 +43,11 @@ const handleChange = (file) => {
   transition: var(--el-transition-duration-fast);
 }
 
-::v-deep .el-upload:hover {
+:deep(.el-upload:hover) {
   border-color: var(--el-color-primary);
 }
 
-::v-deep .el-icon.avatar-uploader-icon {
+:deep(.el-icon.avatar-uploader-icon) {
   font-size: 28px;
   color: #8c939d;
   width: 178px;

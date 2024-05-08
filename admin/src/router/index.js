@@ -91,7 +91,6 @@ const ConfigRouter = () => {
 const checkPermission = item => {
   // 当用户从地址栏输入权限路由时，进行权限拦截
   if (item?.requireAdmin) {
-    console.log(item?.requireAdmin);
     return store.state.userInfo.role === 1
   }
 

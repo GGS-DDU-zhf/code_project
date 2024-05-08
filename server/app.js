@@ -7,6 +7,10 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const UserRouter = require('./routes/admin/UserRouter');
+const NewsRouter = require('./routes/admin/NewsRouter');
+const WebNewsRouter = require('./routes/web/NewsRouter');
+const ProductRouter = require('./routes/admin/ProductRouter')
+const WebProductRouter = require('./routes/web/ProductRouter');
 const JWT = require('./util/JWT');
 
 var app = express();
@@ -23,6 +27,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use(WebNewsRouter)
+app.use(WebProductRouter)
+
+// 不需要进行token校验的路由注册在 ‘校验token是否合法有效’ 前面，需要的注册在后面
 
 // 校验token是否合法有效
 app.use((req, res, next) => {
@@ -62,6 +70,8 @@ app.use((req, res, next) => {
  * /webapi/* - 企业官网用的
 */
 app.use(UserRouter)
+app.use(NewsRouter)
+app.use(ProductRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
